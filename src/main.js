@@ -1,4 +1,6 @@
 import './assets/main.css'
+import '@fontsource/inter'
+import '@fontsource/manrope'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

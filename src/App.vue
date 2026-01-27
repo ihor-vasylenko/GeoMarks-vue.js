@@ -1,3 +1,7 @@
+<script setup>
+import HomepageViewVue from './views/HomepageView.vue'
+</script>
+
 <template>
-  <p class="underline">hello</p>
+  <HomepageViewVue />
 </template>
