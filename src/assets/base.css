@@ -2,15 +2,11 @@
   --font-family: 'Inter', sans-serif;
   --second-family: 'Manrope', sans-serif;
   --primary-bg: #f3743d;
+  --primary-hover: #f89979;
 }
 
 body {
   font-family: var(--font-family), sans-serif;
-  transition:
-    color 0.5s,
-    background-color 0.5s;
-  font-size: 15px;
-  color: #fff;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
