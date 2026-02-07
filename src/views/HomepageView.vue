@@ -15,7 +15,7 @@ font-size: 15px; color: #fff;
           A simple web application that allows you to mark your favorite places, as well as those
           you'd really like to visit.
         </p>
-        <IButton>try it</IButton>
+        <IButton variant="primary">try it</IButton>
       </div>
     </section>
     <section class="flex-1 relative">

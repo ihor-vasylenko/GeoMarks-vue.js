@@ -7,6 +7,7 @@ import IButton from '../IButton.vue'
   <div class="px-6">
     <div class="text-gray mb-4"><slot name="label">Markers</slot></div>
     <FavoritePlaceVue v-for="list in 4" :key="list" />
-    <IButton class="w-full mt-10">Add marker</IButton>
+
+    <IButton class="w-full mt-10" variant="secondary">Add marker</IButton>
   </div>
 </template>
