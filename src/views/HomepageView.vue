@@ -1,5 +1,5 @@
 <script setup>
-import IButton from '../components/IButton.vue'
+import IButton from '../components/IButton/IButton.vue'
 </script>
 font-size: 15px; color: #fff;
 

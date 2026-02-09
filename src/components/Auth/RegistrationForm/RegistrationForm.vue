@@ -1,0 +1,22 @@
+<script setup>
+import { reactive } from 'vue'
+import IButton from '../../IButton/IButton.vue'
+import IInput from '../../IInput/IInput.vue'
+import FormContainer from '../FormContainer.vue'
+
+const emit = defineEmits(['submit'])
+const userData = reactive({
+  name: '',
+  email: '',
+  password: '',
+})
+</script>
+
+<template>
+  <FormContainer @submit.prevent="emit('submit', userData)">
+    <IInput class="mb-4" label="Username" v-model="userData.name" />
+    <IInput class="mb-4" label="Email" placeholder="email@email.com" v-model="userData.email" />
+    <IInput label="Password" type="password" v-model="userData.password" />
+    <IButton class="mt-10 w-full" variant="secondary" type="submit">Sign Up</IButton>
+  </FormContainer>
+</template>
