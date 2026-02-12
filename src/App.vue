@@ -1,31 +1,66 @@
 <script setup>
+import ListFavoritePlaces from './components/ListFavoritePlaces/ListFavoritePlaces.vue'
+import MarkerIcon from './components/icons/MarkerIcon.vue'
+import { MapboxMap, MapboxMarker } from '@studiometa/vue-mapbox-gl'
+import { mapSettings } from './map/settings'
+import 'mapbox-gl/dist/mapbox-gl.css'
 import { ref } from 'vue'
-// import HomepageViewVue from './views/HomepageView.vue'
-// import ListFavoritePlacesVue from './components/ListFavoritePlaces/ListFavoritePlaces.vue'
-import RegistrationForm from './components/Auth/RegistrationForm/RegistrationForm.vue'
-import LoginForm from './components/Auth/LoginForm/LoginForm.vue'
-import CreateNewPlaceModal from './components/CreateNewPlaceModal/CreateNewPlaceModal.vue'
 
-const isOpen = ref(true)
-const closeModal = () => {
-  isOpen.value = false
+const listFavoritePlaces = [
+  {
+    id: 1,
+    title: 'new place 1',
+    description: 'wassup 1 desc',
+    img: '',
+    lngLat: [30.523333, 50.490001],
+  },
+  {
+    id: 2,
+    title: 'new place 2',
+    description: 'wassup 2 desc',
+    img: '',
+    lngLat: [30.523333, 50.450001],
+  },
+]
+
+const activeId = ref(null)
+const map = ref(null)
+
+const changeActiveId = (id) => {
+  activeId.value = id
 }
-const openModal = () => {
-  isOpen.value = true
+
+const changePlace = (id) => {
+  const { lngLat } = listFavoritePlaces.find((place) => place.id === id)
+  changeActiveId(id)
+  map.value.flyTo({ center: lngLat })
 }
 </script>
 
 <template>
-  <!-- <HomepageViewVue /> -->
-  <!-- <ListFavoritePlacesVue>
-    <template #label>Add markers</template>
-  </ListFavoritePlacesVue> -->
-  <button @click="openModal">open</button>
-  <RegistrationForm @submit="console.log" />
-  <LoginForm @submit="console.log" />
-  <CreateNewPlaceModal
-    :is-open="isOpen"
-    @close="closeModal"
-    @submit="console.log"
-  ></CreateNewPlaceModal>
+  <main class="flex h-screen">
+    <div class="bg-white h-full w-[400px] shrink-0 overflow-auto pb-10">
+      <ListFavoritePlaces
+        :items="listFavoritePlaces"
+        :active-id="activeId"
+        @place-clicked="changePlace"
+      />
+    </div>
+    <div class="w-full h-full flex items-center justify-center text-6xl">
+      <MapboxMap
+        class="w-full h-full"
+        :center="[30.523333, 50.450001]"
+        :zoom="10"
+        :access-token="mapSettings.apiToken"
+        :map-style="mapSettings.style"
+        @mb-created="(mapInstance) => (map = mapInstance)"
+      >
+        <MapboxMarker v-for="place in listFavoritePlaces" :key="place.id" :lngLat="place.lngLat">
+          <button @click="changeActiveId(place.id)">
+            <MarkerIcon class="h-8 w-8" />
+          </button>
+        </MapboxMarker>
+      </MapboxMap>
+    </div>
+  </main>
 </template>
