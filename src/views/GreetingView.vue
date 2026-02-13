@@ -11,6 +11,6 @@ import BaseLayout from '@/layouts/BaseLayout.vue'
       A simple web application that allows you to mark your favorite places, as well as those you'd
       really like to visit.
     </p>
-    <IButton variant="primary">try it</IButton>
+    <IButton to="auth/registration" variant="primary">try it</IButton>
   </BaseLayout>
 </template>

@@ -36,7 +36,7 @@ const componentName = computed(() => {
 <template>
   <div class="w-full text-[#2C2C2C]">
     <label class="block">
-      <span class="block text-xs px-3 mb-2">{{ props.label }}</span>
+      <span class="block text-xs px-3 mb-2 text-left">{{ props.label }}</span>
       <component
         :is="componentName"
         rows="3"

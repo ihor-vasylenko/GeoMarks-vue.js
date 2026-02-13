@@ -2,7 +2,6 @@
 import { reactive } from 'vue'
 import IButton from '../../IButton/IButton.vue'
 import IInput from '../../IInput/IInput.vue'
-import FormContainer from '../FormContainer.vue'
 
 const emit = defineEmits(['submit'])
 const userData = reactive({
@@ -12,9 +11,9 @@ const userData = reactive({
 </script>
 
 <template>
-  <FormContainer @submit.prevent="emit('submit', userData)">
-    <IInput class="mb-4" placeholder="Email" v-model="userData.email" />
-    <IInput type="password" placeholder="Password" v-model="userData.password" />
+  <form @submit.prevent="emit('submit', userData)">
+    <IInput class="mb-4" label="Email" placeholder="email@email.com" v-model="userData.email" />
+    <IInput type="password" label="Password" v-model="userData.password" />
     <IButton class="mt-10 w-full" variant="secondary" type="submit">Log In</IButton>
-  </FormContainer>
+  </form>
 </template>
