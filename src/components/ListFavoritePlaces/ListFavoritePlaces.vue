@@ -18,10 +18,10 @@ const emit = defineEmits(['place-clicked'])
 
 <template>
   <div class="px-6">
-    <div class="text-gray mb-4">Додані маркери</div>
-
+    <div class="text-gray mb-4">Added Marks</div>
     <slot name="label"></slot>
     <slot name="list">
+      <div v-if="!items">You don't have any marks</div>
       <FavoritePlace
         v-for="place in props.items"
         :key="place.id"
@@ -34,6 +34,6 @@ const emit = defineEmits(['place-clicked'])
     </slot>
 
     <slot></slot>
-    <IButton class="w-full mt-10" variant="gradient">Додати маркер</IButton>
+    <IButton class="w-full mt-10" variant="secondary">Add marker</IButton>
   </div>
 </template>

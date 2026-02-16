@@ -9,6 +9,10 @@ const props = defineProps({
     validator: (value) => ['primary', 'secondary'].includes(value),
   },
   to: String,
+  isLoading: {
+    default: false,
+    type: Boolean,
+  },
 })
 
 const variantStyles = {
@@ -34,6 +38,7 @@ const link = computed(() => {
     :class="variantStyles[props.variant]"
     :to="link"
   >
-    <slot></slot>
+    <template v-if="props.isLoading">Loading ...</template>
+    <template v-else><slot></slot></template>
   </component>
 </template>
