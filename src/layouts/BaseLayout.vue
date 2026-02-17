@@ -8,7 +8,7 @@
       </div>
     </section>
     <section class="flex-1 relative">
-      <img class="absolute h-full w-full object-cover" src="../assets/img/map-static.jpg" alt="" />
+      <img class="absolute h-full w-full object-cover" src="../assets/img/map-static.png" alt="" />
     </section>
   </main>
 </template>

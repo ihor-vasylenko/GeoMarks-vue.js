@@ -11,6 +11,14 @@ const props = defineProps({
     default: false,
     type: Boolean,
   },
+  isLoading: {
+    default: false,
+    type: Boolean,
+  },
+  hasError: {
+    default: false,
+    type: Boolean,
+  },
 })
 
 const emit = defineEmits(['close', 'submit'])
@@ -27,11 +35,17 @@ const uploadText = computed(() => {
 const handleUpload = (url) => {
   formData.img = url
 }
+
+const resetForm = () => {
+  formData.title = ''
+  formData.description = ''
+  formData.img = ''
+}
 </script>
 
 <template>
   <IModal v-if="props.isOpen" @close="emit('close')">
-    <form @submit.prevent="emit('submit', formData)" class="min-w-[420px]">
+    <form @submit.prevent="emit('submit', formData, resetForm)" class="min-w-[420px]">
       <div class="flex gap-1 justify-center font-bold text-center mb-10">
         <MarkerIcon /> Add marker
       </div>
@@ -41,7 +55,8 @@ const handleUpload = (url) => {
         <img v-if="formData.img" :src="formData.img" alt="avatar" class="w-8 h-8 object-cover" />
         <InputImage @uploaded="handleUpload">{{ uploadText }}</InputImage>
       </div>
-      <IButton class="w-full" variant="secondary">Add</IButton>
+      <IButton class="w-full" variant="secondary" :isLoading="props.isLoading">Add</IButton>
+      <div v-if="props.hasError" class="text-red-600">You didn't put a marker</div>
     </form>
   </IModal>
 </template>

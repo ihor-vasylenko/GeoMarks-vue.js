@@ -16,8 +16,12 @@ const props = defineProps({
 })
 
 const variantStyles = {
-  primary: 'bg-[#FFA279] hover:bg-[#f89979]',
-  secondary: 'bg-gradient-to-r from-[#FFA279] to-[#F3743D] hover:from-[#FF8F66] hover:to-[#E55E2A]',
+  primary: 'bg-[#2b2b2b] hover:bg-[#3e3e3e]',
+  secondary: `relative bg-[linear-gradient(91deg,#7e7e7e_0%,#525252_100%)]
+    before:absolute before:inset-0 before:rounded-[12px]
+    before:bg-[linear-gradient(91deg,#6a6a6a_0%,#3d3d3d_100%)]
+    before:opacity-0 before:transition-opacity before:duration-300
+    hover:before:opacity-100 overflow-hidden`,
 }
 
 const isLink = computed(() => !!props.to)
@@ -38,7 +42,9 @@ const link = computed(() => {
     :class="variantStyles[props.variant]"
     :to="link"
   >
-    <template v-if="props.isLoading">Loading ...</template>
-    <template v-else><slot></slot></template>
+    <span class="relative z-10">
+      <template v-if="props.isLoading">Loading ...</template>
+      <template v-else><slot></slot></template>
+    </span>
   </component>
 </template>

@@ -1,6 +1,12 @@
 <script setup>
+import { computed, ref } from 'vue'
+import EditPlaceModal from '../EditPlaceModal/EditPlaceModal.vue'
 import FavoritePlace from '../FavoritePlace/FavoritePlace.vue'
 import IButton from '../IButton/IButton.vue'
+import { useModal } from '@/composables/useModal'
+import { useMutation } from '@/composables/useMutation'
+import { deleteFavoritePlaces, updateFavoritePlaces } from '@/api/favorite-places'
+import ConfirmationModal from '../ConfirmationModal/ConfirmationModal.vue'
 
 const props = defineProps({
   items: {
@@ -9,11 +15,62 @@ const props = defineProps({
   },
   activeId: {
     required: true,
-    type: [Number, null],
+    type: [String, null],
+  },
+  isPlacesLoading: {
+    type: Boolean,
+    default: false,
   },
 })
 
-const emit = defineEmits(['place-clicked'])
+const emit = defineEmits(['place-clicked', 'create', 'updated'])
+
+const { isOpen: isEditOpen, openModal: openEditModal, closeModal: closeEditModal } = useModal()
+const {
+  isOpen: isConfirmationModalOpen,
+  openModal: openConfirmationModal,
+  closeModal: closeConfirmationModal,
+} = useModal()
+const { mutation: updatePlace, isLoading } = useMutation({
+  mutationFn: (formData) => updateFavoritePlaces(formData),
+  onSuccess: () => {
+    closeEditModal()
+    emit('updated')
+  },
+})
+const {
+  mutation: deletePlace,
+  isLoading: isDeleting,
+  error: deleteError,
+} = useMutation({
+  mutationFn: (id) => deleteFavoritePlaces(id),
+  onSuccess: () => {
+    closeConfirmationModal()
+    IdOfDeletedItem.value = null
+    emit('updated')
+  },
+})
+const selectedId = ref(null)
+const selectedItem = computed(() => props.items.find((place) => place.id === selectedId.value))
+const IdOfDeletedItem = ref(null)
+
+const handleEditPlace = (id) => {
+  selectedId.value = id
+  openEditModal()
+}
+
+const handleSubmit = (formData) => {
+  updatePlace(formData)
+}
+
+const handleOpenConfirmationModal = (id) => {
+  IdOfDeletedItem.value = id
+  openConfirmationModal()
+}
+
+const handleDeletePlace = () => {
+  deletePlace(IdOfDeletedItem.value)
+}
 </script>
 
 <template>
@@ -21,7 +78,7 @@ const emit = defineEmits(['place-clicked'])
     <div class="text-gray mb-4">Added Marks</div>
     <slot name="label"></slot>
     <slot name="list">
-      <div v-if="!items">You don't have any marks</div>
+      <div v-if="items.length === 0 && !isPlacesLoading">You don't have any marks</div>
       <FavoritePlace
         v-for="place in props.items"
         :key="place.id"
@@ -30,10 +87,29 @@ const emit = defineEmits(['place-clicked'])
         :img="place.img"
         :is-active="place.id === props.activeId"
         @click="emit('place-clicked', place.id)"
+        @edit="handleEditPlace(place.id)"
+        @delete="handleOpenConfirmationModal(place.id)"
+      />
+
+      <EditPlaceModal
+        :is-open="isEditOpen"
+        :place="selectedItem"
+        :is-loading="isLoading"
+        @close="closeEditModal"
+        @submit="handleSubmit"
+      />
+
+      <ConfirmationModal
+        :is-open="isConfirmationModalOpen"
+        :is-loading="isDeleting"
+        :has-error="deleteError"
+        @cancel="closeConfirmationModal"
+        @confirm="handleDeletePlace"
+        title="You really want to delete it?"
       />
     </slot>
 
     <slot></slot>
-    <IButton class="w-full mt-10" variant="secondary">Add marker</IButton>
+    <IButton class="w-full mt-10" variant="secondary" @click="emit('create')">Add marker</IButton>
   </div>
 </template>
